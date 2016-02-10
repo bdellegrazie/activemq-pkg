@@ -1,0 +1,8 @@
+/build/
+*.deb
+*.rpm
+*.jar
+*.zip
+.idea
+*.iml
+*.tar.gz
