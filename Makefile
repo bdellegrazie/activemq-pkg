@@ -23,7 +23,7 @@ clean: deb-clean rpm-clean
 dist-clean: clean deps-clean
 
 $(SOURCE):
-	wget -c http://archive.apache.org/dist/$(NAME)/$(VERSION)/$(SOURCE)
+	wget --timestamping -c http://archive.apache.org/dist/$(NAME)/$(VERSION)/$(SOURCE)
 
 deps: $(SOURCE)
 
@@ -60,10 +60,8 @@ deb: deb-clean source-expand
  $(BUILD_DIR)/$(NAME)-$(VERSION)/conf/=/etc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/data=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/docs/=/usr/share/doc/activemq/\
- $(BUILD_DIR)/$(NAME)-$(VERSION)/examples=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/lib=/opt/activemq\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/webapps=/opt/activemq/\
- $(BUILD_DIR)/$(NAME)-$(VERSION)/webapps-demo=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/activemq-all-$(VERSION).jar=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/LICENSE=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/README.txt=/usr/share/doc/activemq/
@@ -86,7 +84,10 @@ rpm: rpm-clean source-expand
  --config-files /etc/sysconfig/activemq\
  --rpm-init $(BUILD_DIR)/$(NAME)-$(VERSION)/bin/linux-x86-64/activemq\
  --template-scripts\
- --after-install rpm/after-install.sh\
+ --rpm-user activemq\
+ --rpm-group activemq\
+ --rpm-defattrfile 0640\
+ --rpm-defattrdir 0750\
  --before-install rpm/before-install.sh\
  --before-remove rpm/before-remove.sh\
  rpm/activemq.sysconfig=/etc/sysconfig/activemq\
@@ -95,10 +96,8 @@ rpm: rpm-clean source-expand
  $(BUILD_DIR)/$(NAME)-$(VERSION)/conf/=/etc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/data=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/docs/=/usr/share/doc/activemq/\
- $(BUILD_DIR)/$(NAME)-$(VERSION)/examples=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/lib=/opt/activemq\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/webapps=/opt/activemq/\
- $(BUILD_DIR)/$(NAME)-$(VERSION)/webapps-demo=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/activemq-all-$(VERSION).jar=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/LICENSE=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/README.txt=/usr/share/doc/activemq/
