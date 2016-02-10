@@ -1,0 +1,74 @@
+diff -uNr apache-activemq-5.13.1/bin/linux-x86-32/activemq apache-activemq-5.13.1.b/bin/linux-x86-32/activemq
+--- apache-activemq-5.13.1/bin/linux-x86-32/activemq	2016-02-02 18:26:49.000000000 +0000
++++ apache-activemq-5.13.1.b/bin/linux-x86-32/activemq	2016-02-10 15:03:12.665719516 +0000
+@@ -286,6 +286,18 @@
+     LOCKPROP=
+ fi
+ 
++checkPIDDIR() {
++    # Make sure PIDDIR is writable by ActiveMQ user
++    if [ ! -d "$PIDDIR" ]; then
++        mkdir -p "$PIDDIR"
++        if [ "X$RUN_AS_USER" != "X" ]
++        then
++            chown $RUN_AS_USER:root "$PIDDIR"
++	fi
++        chmod 0750 "$PIDDIR"
++    fi
++}
++
+ checkUser() {
+     # Check the configured user.  If necessary rerun this script as the desired user.
+     if [ "X$RUN_AS_USER" != "X" ]
+@@ -407,6 +419,7 @@
+ 
+ start() {
+     echo "Starting $APP_LONG_NAME..."
++    checkPIDDIR
+     getpid
+     if [ "X$pid" = "X" ]
+     then
+@@ -551,4 +564,4 @@
+         ;;
+ esac
+ 
+-exit 0
+\ No newline at end of file
++exit 0
+diff -uNr apache-activemq-5.13.1/bin/linux-x86-64/activemq apache-activemq-5.13.1.b/bin/linux-x86-64/activemq
+--- apache-activemq-5.13.1/bin/linux-x86-64/activemq	2016-02-02 18:26:49.000000000 +0000
++++ apache-activemq-5.13.1.b/bin/linux-x86-64/activemq	2016-02-10 15:03:12.665719516 +0000
+@@ -286,6 +286,18 @@
+     LOCKPROP=
+ fi
+ 
++checkPIDDIR() {
++    # Make sure PIDDIR is writable by ActiveMQ user
++    if [ ! -d "$PIDDIR" ]; then
++        mkdir -p "$PIDDIR"
++        if [ "X$RUN_AS_USER" != "X" ]
++        then
++            chown $RUN_AS_USER:root "$PIDDIR"
++	fi
++        chmod 0750 "$PIDDIR"
++    fi
++}
++
+ checkUser() {
+     # Check the configured user.  If necessary rerun this script as the desired user.
+     if [ "X$RUN_AS_USER" != "X" ]
+@@ -407,6 +419,7 @@
+ 
+ start() {
+     echo "Starting $APP_LONG_NAME..."
++    checkPIDDIR
+     getpid
+     if [ "X$pid" = "X" ]
+     then
+@@ -551,4 +564,4 @@
+         ;;
+ esac
+ 
+-exit 0
+\ No newline at end of file
++exit 0
