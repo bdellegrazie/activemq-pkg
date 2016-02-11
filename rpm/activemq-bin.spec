@@ -24,6 +24,8 @@ ActiveMQ Messaging Software
 %autosetup -n %{source_name}-%{version} -p1
 
 %build
+# set correct defaults in wrapper config
+
 
 %install
 rm -rf %{buildroot}
@@ -32,14 +34,18 @@ mkdir -p %{buildroot}%{_var}/log/%{short_name}/
 mkdir -p %{buildroot}%{_sysconfdir}/%{short_name}/
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/
 mkdir -p %{buildroot}%{_initddir}/
+cp -a *.jar bin lib webapps -t %{buildroot}%{base_dir}/
 cp -a conf/* -t %{buildroot}%{_sysconfdir}/%{short_name}/
 # Should check for arch here but the directory names are inconsistent
-ln -s %{base_dir}/bin/%{_os}-%{activemq_arch}/wrapper.conf %{buildroot}%{_sysconfdir}/%{short_name}-wrapper.conf
+cp -a bin/%{_os}-%{activemq_arch}/wrapper.conf %{buildroot}%{_sysconfdir}/%{short_name}-wrapper.conf
+ln -sf -T %{_sysconfdir}/%{short_name}-wrapper.conf %{buildroot}%{base_dir}/bin/%{_os}-%{activemq_arch}/wrapper.conf
 ln -s %{base_dir}/bin/%{_os}-%{activemq_arch}/%{short_name} %{buildroot}%{_initddir}/%{short_name}
-cp -a *.jar bin lib webapps -t %{buildroot}%{base_dir}/
 cat > %{buildroot}%{_sysconfdir}/sysconfig/%{short_name} <<'END'
-# ActiveMQ Home
-ACTIVEMQ_HOME="/opt/%{short_name}"
+# ActiveMQ Locations
+export ACTIVEMQ_HOME="/opt/%{short_name}"
+export ACTIVEMQ_BASE="/opt/%{short_name}"
+export ACTIVEMQ_CONF="%{_sysconfdir}/%{short_name}"
+export ACTIVEMQ_DATA="$ACTIVEMQ_BASE/data"
 
 # Location of the pid file.
 PIDDIR="%{_var}/run/%{short_name}"
@@ -73,9 +79,9 @@ fi
 %{base_dir}/lib/*
 %{base_dir}/webapps/*
 %config %{_initddir}/%{short_name}
-%config(noreplace) %attr(0640,-,-) %{_sysconfdir}/%{short_name}-wrapper.conf
+%config(noreplace) %attr(0640,-,%{short_name}) %{_sysconfdir}/%{short_name}-wrapper.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/%{short_name}
-%defattr(0750,%{short_name},root,0644)
+%defattr(0640,%{short_name},%{short_name},0750)
 %config(noreplace) %{_sysconfdir}/%{short_name}/
 
 %changelog
