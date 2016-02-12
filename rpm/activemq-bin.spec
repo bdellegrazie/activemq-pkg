@@ -57,7 +57,7 @@ END
 %pre
 getent group %{short_name} >/dev/null || groupadd -r %{short_name}
 getent passwd %{short_name} >/dev/null || \
-    useradd -r -g %{short_name} -M -d %{base_dir} -s /sbin/nologin \
+    useradd -r -g %{short_name} -M -d %{base_dir} -s /bin/bash \
     -c "ActiveMQ Service Account" %{short_name}
 exit 0
 
