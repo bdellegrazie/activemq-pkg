@@ -57,7 +57,7 @@ END
 %pre
 getent group %{short_name} >/dev/null || groupadd -r %{short_name}
 getent passwd %{short_name} >/dev/null || \
-    useradd -r -g %{short_name} -M -d %{base_dir}-s /sbin/nologin \
+    useradd -r -g %{short_name} -M -d %{base_dir} -s /sbin/nologin \
     -c "ActiveMQ Service Account" %{short_name}
 exit 0
 
@@ -75,7 +75,7 @@ fi
 %dir %{base_dir}/
 %{base_dir}/*.jar
 %{base_dir}/bin/*
-%attr(0750,%{short_name},%{short_name}) %{base_dir}/data/
+%attr(0750,%{short_name},%{short_name}) %dir %{base_dir}/data/
 %{base_dir}/lib/*
 %{base_dir}/webapps/*
 %config %{_initddir}/%{short_name}
