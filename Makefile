@@ -1,5 +1,5 @@
 NAME:=apache-activemq
-VERSION:=5.13.1
+VERSION:=5.13.2
 SOURCE:=$(NAME)-$(VERSION)-bin.tar.gz
 ARCH:=native
 ITERATION:=1
