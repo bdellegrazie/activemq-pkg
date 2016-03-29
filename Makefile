@@ -23,7 +23,7 @@ clean: deb-clean rpm-clean source-clean
 dist-clean: clean deps-clean
 
 $(SOURCE):
-	wget --timestamping -c http://archive.apache.org/dist/$(NAME)/$(VERSION)/$(SOURCE)
+	wget --timestamping -c http://archive.apache.org/dist/activemq/$(VERSION)/$(SOURCE)
 
 deps: $(SOURCE)
 
@@ -66,7 +66,7 @@ deb: deb-clean source-expand
  $(BUILD_DIR)/$(NAME)-$(VERSION)/LICENSE=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/README.txt=/usr/share/doc/activemq/
 
-rpm: rpm-clean
+rpm: rpm-clean $(SOURCE)
 	mkdir -p $(BUILD_DIR)/BUILD
 	mkdir -p $(BUILD_DIR)/BUILDROOT
 	mkdir -p $(BUILD_DIR)/RPMS
