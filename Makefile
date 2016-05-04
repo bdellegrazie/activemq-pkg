@@ -1,6 +1,7 @@
 NAME:=apache-activemq
-VERSION:=5.13.2
-SOURCE:=$(NAME)-$(VERSION)-bin.tar.gz
+VERSION:=5.13.3
+SOURCE1:=$(NAME)-$(VERSION)-bin.tar.gz
+SOURCE2:=activemq-$(VERSION).rar
 ARCH:=native
 ITERATION:=1
 BUILD_DIR:=build
@@ -22,19 +23,22 @@ clean: deb-clean rpm-clean source-clean
 
 dist-clean: clean deps-clean
 
-$(SOURCE):
-	wget --timestamping -c http://archive.apache.org/dist/activemq/$(VERSION)/$(SOURCE)
+$(SOURCE1):
+	wget --timestamping -c http://archive.apache.org/dist/activemq/$(VERSION)/$(SOURCE1)
 
-deps: $(SOURCE)
+$(SOURCE2):
+	wget --timestamping -c http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/$(VERSION)/activemq-rar-$(VERSION).rar
+
+deps: $(SOURCE1) $(SOURCE2)
 
 source-clean:
 	rm -rf $(BUILD_DIR)/*
 
-source-expand:	$(SOURCE)
+source-expand: $(SOURCE1)
 	mkdir -p $(BUILD_DIR)
-	tar -xzf $(SOURCE) -C $(BUILD_DIR)
+	tar -xzf $(SOURCE1) -C $(BUILD_DIR)
 
-deb: deb-clean source-expand
+deb: deb-clean source-expand $(SOURCE2)
 	mkdir -p $(BUILD_DIR)/var/log/activemq
 	fpm -t deb\
  -s dir\
@@ -55,6 +59,7 @@ deb: deb-clean source-expand
  --after-install deb/after-install.sh\
  --after-remove deb/after-remove.sh\
  --before-remove deb/before-remove.sh\
+ $(SOURCE2)=/opt/activemq/\
  $(BUILD_DIR)/var/log/activemq/=/var/log/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/bin=/opt/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/conf/=/etc/activemq/\
@@ -66,7 +71,7 @@ deb: deb-clean source-expand
  $(BUILD_DIR)/$(NAME)-$(VERSION)/LICENSE=/usr/share/doc/activemq/\
  $(BUILD_DIR)/$(NAME)-$(VERSION)/README.txt=/usr/share/doc/activemq/
 
-rpm: rpm-clean $(SOURCE)
+rpm: rpm-clean $(SOURCE1) $(SOURCE2)
 	mkdir -p $(BUILD_DIR)/BUILD
 	mkdir -p $(BUILD_DIR)/BUILDROOT
 	mkdir -p $(BUILD_DIR)/RPMS

@@ -12,6 +12,7 @@ AutoReqProv:    no
 License:	Apache License v2.0
 URL:		http://activemq.apache.org/
 Source0:	http://archive.apache.org/dist/%{source_name}/%{version}/%{source_name}-%{version}-bin.tar.gz
+Source1:	http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/%{version}/activemq-rar-%{version}.rar
 Patch0:		check_piddir.patch
 
 Requires(pre):	shadow-utils
@@ -34,6 +35,7 @@ mkdir -p %{buildroot}%{_var}/log/%{short_name}/
 mkdir -p %{buildroot}%{_sysconfdir}/%{short_name}/
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/
 mkdir -p %{buildroot}%{_initddir}/
+cp -a %{SOURCE1} -t %{buildroot}%{base_dir}
 cp -a *.jar bin lib webapps -t %{buildroot}%{base_dir}/
 cp -a conf/* -t %{buildroot}%{_sysconfdir}/%{short_name}/
 # Should check for arch here but the directory names are inconsistent
@@ -74,6 +76,7 @@ fi
 %license LICENSE
 %dir %{base_dir}/
 %{base_dir}/*.jar
+%{base_dir}/*.rar
 %{base_dir}/bin/*
 %attr(0750,%{short_name},%{short_name}) %dir %{base_dir}/data/
 %{base_dir}/lib/*
