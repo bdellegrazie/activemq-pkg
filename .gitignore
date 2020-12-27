@@ -1,7 +1,10 @@
+/.bundle/
 /build/
+/vendor/
 *.deb
 *.rpm
 *.jar
+*.rar
 *.zip
 .idea
 *.iml

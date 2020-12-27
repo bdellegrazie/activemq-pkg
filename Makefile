@@ -1,7 +1,7 @@
 NAME:=apache-activemq
-VERSION:=5.13.3
+VERSION:=5.16.0
 SOURCE1:=$(NAME)-$(VERSION)-bin.tar.gz
-SOURCE2:=activemq-$(VERSION).rar
+SOURCE2:=activemq-rar-$(VERSION).rar
 ARCH:=native
 ITERATION:=1
 BUILD_DIR:=build
@@ -24,10 +24,10 @@ clean: deb-clean rpm-clean source-clean
 dist-clean: clean deps-clean
 
 $(SOURCE1):
-	wget --timestamping -c http://archive.apache.org/dist/activemq/$(VERSION)/$(SOURCE1)
+	wget --timestamping -c https://archive.apache.org/dist/activemq/$(VERSION)/$(SOURCE1)
 
 $(SOURCE2):
-	wget --timestamping -c http://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/$(VERSION)/activemq-rar-$(VERSION).rar
+	wget --timestamping -c https://repo1.maven.org/maven2/org/apache/activemq/activemq-rar/$(VERSION)/activemq-rar-$(VERSION).rar
 
 deps: $(SOURCE1) $(SOURCE2)
 
@@ -40,7 +40,7 @@ source-expand: $(SOURCE1)
 
 deb: deb-clean source-expand $(SOURCE2)
 	mkdir -p $(BUILD_DIR)/var/log/activemq
-	fpm -t deb\
+	vendor/bin/fpm -t deb\
  -s dir\
  --name $(NAME)\
  --license "Apache License v2.0"\
